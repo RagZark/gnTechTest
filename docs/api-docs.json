@@ -1,0 +1,271 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Weather API",
+    "version": "1.0.0",
+    "description": "API para obtenção de dados climáticos em tempo real",
+    "contact": {
+      "name": "Suporte API",
+      "url": "http://localhost:3000"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor de Desenvolvimento"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Weather",
+      "description": "Operações relacionadas a dados climáticos"
+    },
+    {
+      "name": "Info", 
+      "description": "Informações da API"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Info"],
+        "summary": "Informações da API",
+        "description": "Retorna informações sobre a API e endpoints disponíveis",
+        "responses": {
+          "200": {
+            "description": "Informações retornadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Weather API"
+                    },
+                    "documentation": {
+                      "type": "string", 
+                      "example": "/api-docs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{apiKey}/weather": {
+      "get": {
+        "tags": ["Weather"],
+        "summary": "Obter dados climáticos de uma cidade",
+        "description": "Retorna dados climáticos em tempo real para uma cidade específica",
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Chave de API para autenticação",
+            "example": "default-api-key-12345"
+          },
+          {
+            "name": "city",
+            "in": "query", 
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Nome da cidade",
+            "example": "São Paulo"
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Código do país (opcional)",
+            "example": "BR"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados climáticos obtidos com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Weather data obtained successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "city": {
+                          "type": "string",
+                          "example": "São Paulo"
+                        },
+                        "country": {
+                          "type": "string", 
+                          "example": "Brazil"
+                        },
+                        "temperature": {
+                          "type": "number",
+                          "example": 24.5
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos"
+          },
+          "401": {
+            "description": "API Key não fornecida"
+          },
+          "403": {
+            "description": "API Key inválida"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/api/{apiKey}/weather/history": {
+      "get": {
+        "tags": ["Weather"],
+        "summary": "Obter histórico completo de dados climáticos",
+        "description": "Retorna todo o histórico de dados climáticos armazenados",
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Histórico retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 15
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{apiKey}/weather/history/{city}": {
+      "get": {
+        "tags": ["Weather"],
+        "summary": "Obter histórico de dados de uma cidade específica",
+        "description": "Retorna o histórico de dados climáticos para uma cidade em particular",
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city", 
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "São Paulo"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Histórico da cidade retornado com sucesso"
+          },
+          "404": {
+            "description": "Nenhum dado encontrado para esta cidade"
+          }
+        }
+      }
+    },
+    "/api/{apiKey}/weather/latest/{city}": {
+      "get": {
+        "tags": ["Weather"],
+        "summary": "Obter último registro de dados de uma cidade",
+        "description": "Retorna o registro mais recente de dados climáticos para uma cidade",
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path", 
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "London"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Último registro retornado com sucesso"
+          },
+          "404": {
+            "description": "Nenhum dado encontrado para esta cidade"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "API Key is required"
+          },
+          "message": {
+            "type": "string", 
+            "example": "Use the format: /api/your-api-key/weather?city=CityName"
+          }
+        }
+      }
+    }
+  }
+}
