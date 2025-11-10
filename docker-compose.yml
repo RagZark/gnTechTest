@@ -1,0 +1,41 @@
+services:
+  app:
+    build: .
+    ports: ["3000:3000"]
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=weather_db
+      - DB_USER=weather_user
+      - DB_PASSWORD=weather_password
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+      - API_KEY=${API_KEY:-default-api-key-12345}
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes: [".:/app", "/app/node_modules"]
+    working_dir: /app
+    command: npm start
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=weather_db
+      - POSTGRES_USER=weather_user
+      - POSTGRES_PASSWORD=weather_password
+    ports: ["5432:5432"]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U weather_user -d weather_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      postgres
+      -c password_encryption=md5
+      -c listen_addresses='*'
+
+volumes:
+  postgres_data:
