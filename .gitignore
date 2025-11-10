@@ -1,0 +1,25 @@
+# Node
+node_modules/
+.env
+.env.local
+
+# Logs
+logs
+*.log
+
+# Docker
+docker-compose.override.yml
+*.pid
+*.seed
+*.bak
+*.tmp
+
+# Sistema
+.DS_Store
+dist/
+build/
+coverage/
+
+# IDE
+.vscode/
+.idea/
