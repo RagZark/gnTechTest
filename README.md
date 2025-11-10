@@ -5,7 +5,7 @@ Uma API RESTful para obter dados climáticos em tempo real de cidades ao redor d
 ## Início Rápido
 
 ### Pré-requisitos
-- Docker
+- Docker: https://www.docker.com/
 - Docker Compose
 - Chave de API em: https://www.weatherapi.com/
 
